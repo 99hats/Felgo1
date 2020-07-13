@@ -63,5 +63,6 @@ macx {
 
 DISTFILES += \
     qml/FlickResize.qml \
+    qml/Flower.qml \
     qml/KMSButton.qml \
     qml/SlideButton.qml
