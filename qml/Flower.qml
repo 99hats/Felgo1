@@ -15,6 +15,7 @@ import Felgo 3.0
         AppText {
             text : "Flower"
             anchors.centerIn: parent
+            color: "white"
         }
     }
 
