@@ -30,6 +30,25 @@ App {
     }
 
     Navigation {
+        drawerMinifyEnabled: true
+        navigationMode: navigationModeDefault
+        //        drawerInline: true
+
+
+        headerView: AppText {
+            text: "MCW"
+        }
+
+        footerView: AppText {
+            text: "Footer"
+        }
+
+        navigationDrawerItem: Text {
+            text: "Open"
+            anchors.centerIn: parent
+            color: navigation.navigationDrawerItemPressed ? "red" : "green"
+        }
+
 
         NavigationItem {
             title: "Main"
@@ -44,21 +63,21 @@ App {
                     title: "Home"
 
 
-                    titleItem: Row {
-                        spacing: dp(6)
+                    titleItem:
 
 
                         Image {
-                            anchors.verticalCenter: parent.verticalCenter
-                            height: titleText.height
-                            fillMode: Image.PreserveAspectFit
-                            source: "https://bloximages.newyork1.vip.townnews.com/montereycountyweekly.com/content/tncms/assets/v3/editorial/6/5b/65bac51a-7c1a-11e5-a65b-078cfc4fa089/562e83543ae88.image.png"
-                            DragHandler { id: dHand}
-                        }
+                        id: logo
+                        anchors.verticalCenter: parent.verticalCenter
+                        height: titleText.height
+                        fillMode: Image.PreserveAspectFit
+                        source: "https://bloximages.newyork1.vip.townnews.com/montereycountyweekly.com/content/tncms/assets/v3/editorial/6/5b/65bac51a-7c1a-11e5-a65b-078cfc4fa089/562e83543ae88.image.png"
+                        DragHandler { id: dHand; }
 
                         AppText {
                             id: titleText
-                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.left: logo.right
+                            anchors.top: logo.top
                             text: page.title
                             font.bold: true
                             font.family: Theme.boldFont.name
@@ -66,6 +85,10 @@ App {
                             color: "white"
                         }
                     }
+
+
+
+
 
 
                     Item {
@@ -109,7 +132,7 @@ App {
                             anchors.fill: parent
                             onPressed: {
                                 console.log("pressed")
-                                navigationStack.push(article, {showAdvancedSettings: true})
+                                navigationStack.clearAndPush(article, {showAdvancedSettings: true})
                             }
                         }
 
@@ -203,6 +226,7 @@ App {
 
             NavigationStack {
                 splitView: tablet || landscape
+                navigationBarShadow: true
 
                 Page {
                     title: "List Page"
@@ -221,7 +245,10 @@ App {
                             onSelected: {
                                 console.log( index)
                                 app.index = parseInt(index)
-                                navigationStack.push(article)
+                                navigationStack.popAllExceptFirstAndPush(article)
+
+
+
                             }
                         }
 
@@ -240,13 +267,92 @@ App {
                 Page {
                     title: "Flickable"
 
-                    FlickResize {
+                    Image {
                         width: parent.width
                         height: parent.height
+                        fillMode: Image.PreserveAspectFit
                         source: "https://bloximages.newyork1.vip.townnews.com/montereycountyweekly.com/content/tncms/assets/v3/editorial/a/e5/ae5e3006-bfc0-11ea-8b18-1b42ef5f18c1/5f037e9516899.image.jpg?resize=750%2C717"
+                        AppCardSwipeArea {
+
+                        }
                     }
                 }
             }
+        }
+
+        NavigationItem {
+            title: "Cards"
+            icon: IconType.columns
+
+            NavigationStack {
+
+                Page {
+                    id: cardPage
+
+
+                    Repeater {
+                        id:repeater
+                        model: Object.values(jsonData)
+
+                        AppCard {
+                            id: card
+
+                            topMargin: (repeater.count - index)* dp(15)
+                            rightMargin:index * dp(1)
+//                            leftMargin: index * dp(1)
+                            width: parent.width - dp(repeater.count)
+                            paper.background.height: dp(300)
+
+                            margin: dp(15)
+                            paper.radius: dp(5)
+                            paper.height: dp(800)
+                            paper.shadow.spread: dp(0)
+                            paper.shadow.glowRadius: dp(0)
+                            paper.elevated: true
+                            swipeEnabled: true
+                            cardSwipeArea.rotationFactor: 0.05
+
+                            header: SimpleRow {
+                                imageSource: modelData.preview_url
+                                text: "news"
+                                detailText: modelData.title
+
+                                enabled: false
+                                image.radius: image.width/2
+                                image.fillMode: Image.PreserveAspectCrop
+                                style: StyleSimpleRow {
+                                    showDisclosure: false
+                                    backgroundColor: "transparent"
+                                }
+                            }
+
+                            content: AppText { text: modelData.title; width: parent.width ; padding: dp(15) }
+
+                            media: AppImage {
+                                width: parent.width
+                                fillMode: Image.PreserveAspectFit
+                                height: dp(200)
+                                source: modelData.preview_url
+                            }
+                            actions: Row {
+                                IconButton {
+                                    icon: IconType.thumbsup
+                                }
+                                IconButton {
+                                    icon: IconType.sharealt
+                                }
+                                AppButton {
+                                    text: "Follow"
+                                    flat: true
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+            }
+
         }
 
 
@@ -256,6 +362,7 @@ App {
         id: article
 
         Page {
+            id: page
             //                navigationBarHidden: true
             title: " "
             Rectangle {
@@ -344,6 +451,26 @@ App {
 
                             AppText {
                                 id: contentColumn
+
+                                property int xtop: 0
+
+                                //                                onLineLaidOut: {
+                                //                                    if (line.number===1){
+                                //                                        xtop = line.y
+                                //                                    }
+                                //                                    line.width = 300
+
+                                //                                    if (line.y > 200 && line.y < 400){
+                                //                                        line.x += 400
+                                //                                        line.y -= 200
+                                //                                    } else if (line.y>= 400 && line.y < 600) {
+
+                                //                                            line.y -= 150
+                                //                                        }
+
+
+                                //                                    console.log(":", line.number, line.x, line.y, line.width)
+                                //                                }
 
                                 width: parent.width - dp(40)
                                 anchors.horizontalCenter: parent.horizontalCenter
