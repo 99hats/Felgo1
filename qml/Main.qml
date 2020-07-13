@@ -274,6 +274,18 @@ App {
 
                 }
 
+                AppButton {
+                    text: "Reload"
+                    width: dp(100)
+                    height: dp(50)
+                    anchors.bottom: parent.bottom
+                    anchors.right: parent.right
+                    onClicked: {
+                        flowerPageLoader.source = ""
+                        flowerPageLoader.source = "https://raw.githubusercontent.com/99hats/Felgo1/master/qml/Flower.qml"
+                    }
+                }
+
 
             }
         }
