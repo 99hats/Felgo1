@@ -264,7 +264,17 @@ App {
 
             NavigationStack {
 
-               Flower {}
+
+
+                Loader {
+                    id: flowerPageLoader
+                    asynchronous: true
+                    source: "https://raw.githubusercontent.com/99hats/Felgo1/master/qml/Flower.qml"
+                    anchors.fill: parent
+
+                }
+
+
             }
         }
 
@@ -287,7 +297,7 @@ App {
 
                             topMargin: (repeater.count - index)* dp(15)
                             rightMargin:index * dp(1)
-//                            leftMargin: index * dp(1)
+                            //                            leftMargin: index * dp(1)
                             width: parent.width - dp(repeater.count)
                             paper.background.height: dp(300)
 
