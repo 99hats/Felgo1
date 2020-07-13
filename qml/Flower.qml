@@ -13,7 +13,7 @@ import Felgo 3.0
         }
 
         AppText {
-            text : "Flower"
+            text : "Flower Power"
             anchors.centerIn: parent
             color: "white"
         }
