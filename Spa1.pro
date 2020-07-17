@@ -64,5 +64,8 @@ macx {
 DISTFILES += \
     qml/FlickResize.qml \
     qml/Flower.qml \
+    qml/HomepageMockup.qml \
     qml/KMSButton.qml \
+    qml/NestedLists.qml \
+    qml/SciencePage.qml \
     qml/SlideButton.qml

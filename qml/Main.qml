@@ -3,8 +3,10 @@ import Felgo 3.0
 
 App {
     id: app
-    property string serverUrl: "https://mcweekly-app.firebaseio.com/v10/hometab/blog.json"
+    property string serverUrl: "https://mcweekly-app.firebaseio.com/v10/hometab.json"
     property var jsonData: undefined
+    property var allData: undefined
+    property var ads: undefined
 
     property int index: 0
 
@@ -21,7 +23,9 @@ App {
         .then(function(res){
             console.log("image found")
             console.log(res.body['2020-07-02T15:02:00-07:00-be4d2c5e-bc93-11ea-961b-7776a435844c'])
-            jsonData =Object.values(res.body).reverse()
+            jsonData =Object.values(res.body.blog).reverse()
+            allData = res.body
+            ads = Object.values(res.body.ads)
         })
         .catch(function(err){
             console.log(err.message)
@@ -259,12 +263,21 @@ App {
         }
 
         NavigationItem {
+            title: "Science"
+            icon: IconType.coffee
+
+            Loader {
+                id: sciencePageLoader
+                source: "SciencePage.qml"
+                anchors.fill: parent
+            }
+        }
+
+        NavigationItem {
             title: "Flower"
             icon: IconType.stackoverflow
 
             NavigationStack {
-
-
 
                 Loader {
                     id: flowerPageLoader
@@ -275,18 +288,70 @@ App {
                 }
 
                 AppButton {
+                    id: reloadButton
                     text: "Reload"
                     width: dp(100)
                     height: dp(50)
                     anchors.bottom: parent.bottom
                     anchors.right: parent.right
                     onClicked: {
-                        flowerPageLoader.source = ""
-                        flowerPageLoader.source = "https://raw.githubusercontent.com/99hats/Felgo1/master/qml/Flower.qml"
+                        //                        flowerPageLoader.source = ""
+                        flowerPageLoader.source = "https://raw.githubusercontent.com/99hats/Felgo1/master/qml/Flower.qml?"+Math.random()
                     }
                 }
 
+                Text {
+                    id: reloadText
+                    text: flowerPageLoader.source
+                    horizontalAlignment: Text.AlignRight
+                    anchors.bottom: reloadButton.top
+                    anchors.right: reloadButton.right
+                }
 
+
+            }
+        }
+
+        NavigationItem {
+            title: "Homepage Mockup"
+            icon: IconType.filemovieo
+
+            NavigationStack {
+
+                HomepageMockup {
+                    anchors .fill: parent
+                }
+            }
+        }
+
+        NavigationItem {
+            title: "NestedList"
+            icon: IconType.angellist
+
+            NavigationStack {
+
+                navigationBarShadow: true
+
+
+                NestedLists {
+                    anchors.fill: parent
+                }
+            }
+        }
+
+        NavigationItem {
+            title: "YouTube"
+            icon: IconType.youtube
+
+            NavigationStack  {
+                Page {
+                    title: "YouTube"
+
+                    YouTubeWebPlayer {
+                        width: parent.width
+                        videoId: "mfpllV55mWw"
+                    }
+                }
             }
         }
 
